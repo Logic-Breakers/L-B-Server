@@ -4,7 +4,8 @@ import lombok.Getter;
 
 
 public enum ExceptionCode {
-    STAY_NOT_FOUND(404, "Stay not found");
+    STAY_NOT_FOUND(404, "Stay not found"),
+    CATEGORY_NOT_FOUND(404, "Category not found");
 
     @Getter
     private int status;
