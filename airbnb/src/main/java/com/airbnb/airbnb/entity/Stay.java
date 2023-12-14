@@ -43,9 +43,9 @@ public class Stay {
 //    @JoinColumn(name = "user_id")
 //    private User user;
 
-//    @ManyToOne
-//    @JoinColumn(name = "category_id")
-//    private Category category;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
 
 }

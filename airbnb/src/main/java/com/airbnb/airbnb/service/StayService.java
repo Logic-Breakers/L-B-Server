@@ -23,10 +23,13 @@ import java.util.Optional;
 public class StayService {
     private final StayRepository stayRepository;
     private final StayMapper stayMapper;
+    private final CategoryService categoryService;
 
     @Transactional
-    public void createStay (StayPostDto stayPostDto) {
-       stayRepository.save(stayMapper.toStay(stayPostDto));
+    public void createStay (StayPostDto stayPostDto, Long categoryId) {
+        Stay stay = stayMapper.toStay(stayPostDto);
+        stay.setCategory(categoryService.findVerifiedCategory(categoryId));
+        stayRepository.save(stay);
     }
 
     @Transactional
@@ -63,6 +66,11 @@ public class StayService {
     @Transactional
     public void removeStay (Long id) {
         stayRepository.delete(findVerifiedStay(id));
+    }
+
+    @Transactional
+    public List<Stay> findStaysByCategory (int page, int size, Long categoryId) {
+        return stayRepository.findAllByCategoryId(categoryId,PageRequest.of(page-1, size, Sort.by("id").descending()));
     }
 
 }

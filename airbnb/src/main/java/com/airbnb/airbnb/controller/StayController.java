@@ -26,9 +26,10 @@ public class StayController {
     private final StayService stayService;
 
     @Transactional
-    @PostMapping
-    public ResponseEntity postStay (@Valid @RequestBody StayPostDto stayPostDto) {
-        stayService.createStay(stayPostDto);
+    @PostMapping("/category/{category-id}")
+    public ResponseEntity postStay (@Valid @RequestBody StayPostDto stayPostDto,
+                                    @PathVariable("category-id") Long categoryId) {
+        stayService.createStay(stayPostDto, categoryId);
         return new ResponseEntity("숙소 등록이 완료되었습니다.", HttpStatus.CREATED);
     }
 
@@ -58,5 +59,12 @@ public class StayController {
     public ResponseEntity getStays (@Positive @RequestParam int page,
                                     @Positive @RequestParam int size) {
         return new ResponseEntity(stayService.findStays(page, size), HttpStatus.OK);
+    }
+    @Transactional
+    @GetMapping("/category/{category-id}")
+    public ResponseEntity getStaysByCategory (@Positive @RequestParam int page,
+                                              @Positive @RequestParam int size,
+                                              @PathVariable("category-id") Long categoryId) {
+        return new ResponseEntity(stayService.findStaysByCategory(page, size, categoryId), HttpStatus.OK);
     }
 }
