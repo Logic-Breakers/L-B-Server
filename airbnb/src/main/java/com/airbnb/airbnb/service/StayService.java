@@ -2,10 +2,12 @@ package com.airbnb.airbnb.service;
 
 import com.airbnb.airbnb.dto.StayPatchDto;
 import com.airbnb.airbnb.dto.StayPostDto;
+import com.airbnb.airbnb.entity.Category;
 import com.airbnb.airbnb.entity.Stay;
 import com.airbnb.airbnb.exception.BusinessLogicException;
 import com.airbnb.airbnb.exception.ExceptionCode;
 import com.airbnb.airbnb.mapper.StayMapper;
+import com.airbnb.airbnb.repository.CategoryRepository;
 import com.airbnb.airbnb.repository.StayRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,9 +16,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -24,11 +27,13 @@ public class StayService {
     private final StayRepository stayRepository;
     private final StayMapper stayMapper;
     private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
-    public void createStay (StayPostDto stayPostDto, Long categoryId) {
+    public void createStay (StayPostDto stayPostDto, Set<Long> categoryIds) {
         Stay stay = stayMapper.toStay(stayPostDto);
-        stay.setCategory(categoryService.findVerifiedCategory(categoryId));
+        Set<Category> categories = new HashSet<>(categoryRepository.findAllByIdIn(categoryIds));
+        stay.setCategories(categories);
         stayRepository.save(stay);
     }
 
@@ -70,7 +75,7 @@ public class StayService {
 
     @Transactional
     public List<Stay> findStaysByCategory (int page, int size, Long categoryId) {
-        return stayRepository.findAllByCategoryId(categoryId,PageRequest.of(page-1, size, Sort.by("id").descending()));
+        return stayRepository.findAllByCategoriesId(categoryId,PageRequest.of(page-1, size, Sort.by("id").descending()));
     }
 
 }

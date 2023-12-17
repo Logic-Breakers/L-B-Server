@@ -12,7 +12,6 @@ public class StayPostDto {
 
     @NotBlank(message = "설명은 공백이 아니어야 합니다.")
     private String info;
-//    private Category category;
     @NotBlank(message = "국가를 입력해야 합니다.")
     private String country;
     @NotNull(message = "평균 금액을 입력해야 합니다.")

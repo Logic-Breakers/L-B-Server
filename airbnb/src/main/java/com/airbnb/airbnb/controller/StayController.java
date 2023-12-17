@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/stays")
@@ -26,10 +26,10 @@ public class StayController {
     private final StayService stayService;
 
     @Transactional
-    @PostMapping("/category/{category-id}")
+    @PostMapping
     public ResponseEntity postStay (@Valid @RequestBody StayPostDto stayPostDto,
-                                    @PathVariable("category-id") Long categoryId) {
-        stayService.createStay(stayPostDto, categoryId);
+                                    @RequestParam Set<Long> categoryIds) {
+        stayService.createStay(stayPostDto, categoryIds);
         return new ResponseEntity("숙소 등록이 완료되었습니다.", HttpStatus.CREATED);
     }
 
@@ -51,7 +51,7 @@ public class StayController {
     @DeleteMapping("/{stay-id}")
     public ResponseEntity deleteStay (@PathVariable("stay-id") Long id) {
         stayService.removeStay(id);
-        return new ResponseEntity("숙소 정보가 삭제되었습니다.", HttpStatus.NO_CONTENT);
+        return new ResponseEntity("숙소 정보가 삭제되었습니다.", HttpStatus.OK);
     }
 
     @Transactional
@@ -63,8 +63,8 @@ public class StayController {
     @Transactional
     @GetMapping("/category/{category-id}")
     public ResponseEntity getStaysByCategory (@Positive @RequestParam int page,
-                                              @Positive @RequestParam int size,
-                                              @PathVariable("category-id") Long categoryId) {
+                                                          @Positive @RequestParam int size,
+                                                          @PathVariable("category-id") Long categoryId) {
         return new ResponseEntity(stayService.findStaysByCategory(page, size, categoryId), HttpStatus.OK);
     }
 }

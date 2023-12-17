@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface StayRepository extends JpaRepository<Stay,Long> {
 
-    List<Stay> findAllByCategoryId (Long categoryId, Pageable pageable);
-
+    List<Stay> findAllByCategoriesId(Long categoryId, Pageable pageable);
 }
