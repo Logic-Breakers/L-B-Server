@@ -79,4 +79,10 @@ public class StayService {
         return stayRepository.findAllByCategoriesId(categoryId,PageRequest.of(page-1, size, Sort.by("id").descending()));
     }
 
+    @Transactional
+    public List<Stay> findStaysByCountry (int page, int size, String country) {
+        return stayRepository.findAllByCountry(country,PageRequest.of(page-1, size, Sort.by("id").descending()
+        ));
+    }
+
 }

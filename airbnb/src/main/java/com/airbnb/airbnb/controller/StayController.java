@@ -63,8 +63,16 @@ public class StayController {
     @Transactional
     @GetMapping("/category/{category-id}")
     public ResponseEntity getStaysByCategory (@Positive @RequestParam int page,
-                                                          @Positive @RequestParam int size,
-                                                          @PathVariable("category-id") Long categoryId) {
+                                              @Positive @RequestParam int size,
+                                              @PathVariable("category-id") Long categoryId) {
         return new ResponseEntity(stayService.findStaysByCategory(page, size, categoryId), HttpStatus.OK);
+    }
+
+    @Transactional
+    @GetMapping("/country")
+    public ResponseEntity getStaysByCountry (@Positive @RequestParam int page,
+                                             @Positive @RequestParam int size,
+                                             @RequestParam(required = false, defaultValue = "대한민국") String country) {
+        return new ResponseEntity(stayService.findStaysByCountry(page, size, country), HttpStatus.OK);
     }
 }
