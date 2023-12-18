@@ -29,6 +29,17 @@ public class Stay {
     @Column(nullable = false)
     private String country;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PropertyType propertyType;
+
+    public enum PropertyType {
+        HOUSE,
+        FLAT,
+        GUEST_HOUSE,
+        HOTEL
+    }
+
     @Column(nullable = false)
     private Long charge;
 

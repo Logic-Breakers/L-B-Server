@@ -56,6 +56,8 @@ public class StayService {
                 .ifPresent(info -> findStay.setInfo(info));
         Optional.ofNullable(stayPatchDto.getCountry())
                 .ifPresent(country -> findStay.setCountry(country));
+        Optional.ofNullable(stayPatchDto.getPropertyType())
+                .ifPresent(propertyType -> findStay.setPropertyType(propertyType));
         Optional.ofNullable(stayPatchDto.getCharge())
                 .ifPresent(charge -> findStay.setCharge(charge));
         Optional.ofNullable(stayPatchDto.getBeds())
@@ -64,7 +66,6 @@ public class StayService {
                 .ifPresent(bedrooms -> findStay.setBedrooms(bedrooms));
         Optional.ofNullable(stayPatchDto.getBathrooms())
                 .ifPresent(bathrooms -> findStay.setBathrooms(bathrooms));
-
         stayRepository.save(findStay);
     }
 

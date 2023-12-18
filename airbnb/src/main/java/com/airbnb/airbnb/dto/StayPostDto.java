@@ -1,6 +1,7 @@
 package com.airbnb.airbnb.dto;
 
 import com.airbnb.airbnb.entity.Category;
+import com.airbnb.airbnb.entity.Stay;
 import lombok.Getter;
 import lombok.Setter;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +15,8 @@ public class StayPostDto {
     private String info;
     @NotBlank(message = "국가를 입력해야 합니다.")
     private String country;
+    @NotNull(message = "숙소 유형을 입력해야 합니다.")
+    private Stay.PropertyType propertyType;
     @NotNull(message = "평균 금액을 입력해야 합니다.")
     private Long charge;
     @NotNull(message = "침대 개수를 입력해야 합니다.")
