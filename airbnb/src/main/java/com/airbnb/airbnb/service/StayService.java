@@ -4,10 +4,11 @@ import com.airbnb.airbnb.dto.StayPatchDto;
 import com.airbnb.airbnb.dto.StayPostDto;
 import com.airbnb.airbnb.entity.Category;
 import com.airbnb.airbnb.entity.Stay;
+import com.airbnb.airbnb.entity.StayCategories;
 import com.airbnb.airbnb.exception.BusinessLogicException;
 import com.airbnb.airbnb.exception.ExceptionCode;
 import com.airbnb.airbnb.mapper.StayMapper;
-import com.airbnb.airbnb.repository.CategoryRepository;
+import com.airbnb.airbnb.repository.StayCategoriesRepository;
 import com.airbnb.airbnb.repository.StayRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,10 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -27,13 +25,20 @@ public class StayService {
     private final StayRepository stayRepository;
     private final StayMapper stayMapper;
     private final CategoryService categoryService;
-    private final CategoryRepository categoryRepository;
+    private final StayCategoriesRepository stayCategoriesRepository;
+
 
     @Transactional
-    public void createStay (StayPostDto stayPostDto, Set<Long> categoryIds) {
+    public void createStay(StayPostDto stayPostDto, Set<Long> categoryIds) {
         Stay stay = stayMapper.toStay(stayPostDto);
-        Set<Category> categories = new HashSet<>(categoryRepository.findAllByIdIn(categoryIds));
-        stay.setCategories(categories);
+        List<StayCategories> setStayCategories = new ArrayList<>();
+        for (Long categoryId : categoryIds) {
+            Category category = categoryService.findVerifiedCategory(categoryId);
+            StayCategories stayCategories = new StayCategories(stay, category);
+            setStayCategories.add(stayCategories);
+            stayCategoriesRepository.save(stayCategories);
+        }
+        stay.setStayCategories(setStayCategories);
         stayRepository.save(stay);
     }
 
@@ -76,7 +81,13 @@ public class StayService {
 
     @Transactional
     public List<Stay> findStaysByCategory (int page, int size, Long categoryId) {
-        return stayRepository.findAllByCategoriesId(categoryId,PageRequest.of(page-1, size, Sort.by("id").descending()));
+        List<StayCategories> staysByCategory = stayCategoriesRepository.findAllByCategory_Id(categoryId,PageRequest.of(page-1, size, Sort.by("id").descending()));
+        List<Stay> stays = new ArrayList<>();
+        for (StayCategories stayCategories : staysByCategory) {
+            Stay stay = stayCategories.getStay();
+            stays.add(stay);
+        }
+        return stays;
     }
 
     @Transactional

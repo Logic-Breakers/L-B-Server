@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,8 +25,8 @@ public class Category {
     @Column(nullable = false)
     private String categoryName;
 
-    @ManyToMany(mappedBy = "categories")
-    private Set<Stay> stays = new HashSet<>();
+    @OneToMany(mappedBy = "category")
+    private List<StayCategories> stayCategories = new ArrayList<>();
 
     public Category(Long id, String categoryName) {
         this.id = id;

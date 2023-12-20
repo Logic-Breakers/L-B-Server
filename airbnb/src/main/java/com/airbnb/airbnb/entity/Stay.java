@@ -1,14 +1,14 @@
 package com.airbnb.airbnb.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -57,14 +57,8 @@ public class Stay {
 //    @JoinColumn(name = "user_id")
 //    private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "stay_category",
-            joinColumns = @JoinColumn(name = "stay_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    @JsonIgnore
-    private Set<Category> categories = new HashSet<>();
+    @OneToMany(mappedBy = "stay", cascade = CascadeType.REMOVE)
+    private List<StayCategories> stayCategories = new ArrayList<>();
 
 
 }
