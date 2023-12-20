@@ -1,5 +1,6 @@
 package com.airbnb.airbnb.service;
 
+import com.airbnb.airbnb.StaySpecification;
 import com.airbnb.airbnb.dto.StayPatchDto;
 import com.airbnb.airbnb.dto.StayPostDto;
 import com.airbnb.airbnb.entity.Category;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,6 +102,23 @@ public class StayService {
     public List<Stay> findStaysByCountry (int page, int size, String country) {
         return stayRepository.findAllByCountry(country,PageRequest.of(page-1, size, Sort.by("id").descending()
         ));
+    }
+    @Transactional
+    public List<Stay> findStaysByFilter(int page, int size, String country, Long beds, Long bathrooms, Stay.PropertyType propertyType) {
+        Specification<Stay> specification = (root, query, criteriaBuilder) -> null;
+        if (country != null) {
+            specification = specification.and(StaySpecification.equalCountry(country));
+        }
+        if (beds != null) {
+            specification = specification.and(StaySpecification.equalBeds(beds));
+        }
+        if (bathrooms != null) {
+            specification = specification.and(StaySpecification.equalBathrooms(bathrooms));
+        }
+        if (propertyType != null) {
+            specification = specification.and(StaySpecification.equalPropertyType(propertyType));
+        }
+        return stayRepository.findAll(specification, PageRequest.of(page-1, size, Sort.by("id").descending())).getContent();
     }
 
 }

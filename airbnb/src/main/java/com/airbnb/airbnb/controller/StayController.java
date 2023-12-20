@@ -75,4 +75,14 @@ public class StayController {
                                              @RequestParam(required = false, defaultValue = "대한민국") String country) {
         return new ResponseEntity(stayService.findStaysByCountry(page, size, country), HttpStatus.OK);
     }
+    @Transactional
+    @GetMapping("/filter")
+    public ResponseEntity getStaysByFilter (@Positive @RequestParam int page,
+                                            @Positive @RequestParam int size,
+                                            @RequestParam(required = false, defaultValue = "대한민국") String country,
+                                            @RequestParam(required = false) Long beds,
+                                            @RequestParam(required = false) Long bathrooms,
+                                            @RequestParam(required = false) Stay.PropertyType propertyType) {
+        return new ResponseEntity(stayService.findStaysByFilter(page, size, country, beds, bathrooms, propertyType), HttpStatus.OK);
+    }
 }
