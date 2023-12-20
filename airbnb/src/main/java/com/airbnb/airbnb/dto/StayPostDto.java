@@ -2,13 +2,17 @@ package com.airbnb.airbnb.dto;
 
 import com.airbnb.airbnb.entity.Category;
 import com.airbnb.airbnb.entity.Stay;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class StayPostDto {
 
     @NotBlank(message = "설명은 공백이 아니어야 합니다.")

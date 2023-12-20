@@ -57,7 +57,7 @@ public class Stay {
 //    @JoinColumn(name = "user_id")
 //    private User user;
 
-    @OneToMany(mappedBy = "stay", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "stay", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<StayCategories> stayCategories = new ArrayList<>();
 
 
