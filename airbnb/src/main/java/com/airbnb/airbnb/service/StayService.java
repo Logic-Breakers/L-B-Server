@@ -71,6 +71,12 @@ public class StayService {
                 .ifPresent(bedrooms -> findStay.setBedrooms(bedrooms));
         Optional.ofNullable(stayPatchDto.getBathrooms())
                 .ifPresent(bathrooms -> findStay.setBathrooms(bathrooms));
+        stayCategoriesRepository.deleteAllByStay_Id(id);
+        List<Long> categories = stayPatchDto.getCategories();
+        for (Long category : categories) {
+            StayCategories stayCategories = new StayCategories(findStay, categoryService.findVerifiedCategory(category));
+            stayCategoriesRepository.save(stayCategories);
+        }
         stayRepository.save(findStay);
     }
 

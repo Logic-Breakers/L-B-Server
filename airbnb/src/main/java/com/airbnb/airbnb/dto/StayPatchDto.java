@@ -1,11 +1,11 @@
 package com.airbnb.airbnb.dto;
 
-import com.airbnb.airbnb.entity.Category;
 import com.airbnb.airbnb.entity.Stay;
 import lombok.Getter;
 import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,5 +25,6 @@ public class StayPatchDto {
     private Long bedrooms;
     @NotNull(message = "화장실 개수를 입력해야 합니다.")
     private Long bathrooms;
+    private List<Long> categories;
 
 }
