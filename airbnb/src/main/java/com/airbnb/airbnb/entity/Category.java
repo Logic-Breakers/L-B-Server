@@ -27,9 +27,4 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     private List<StayCategories> stayCategories = new ArrayList<>();
-
-    public Category(Long id, String categoryName) {
-        this.id = id;
-        this.categoryName = categoryName;
-    }
 }
