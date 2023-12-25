@@ -28,6 +28,6 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private Enum role; //표기맞는지 확인하기
+    private UserRoleEnum role;
 }
 
