@@ -5,6 +5,8 @@ import lombok.Getter;
 
 public enum ExceptionCode {
     STAY_NOT_FOUND(404, "Stay not found"),
+    IMAGE_NOT_FOUND(404, "Image not found"),
+    IMAGE_LIMIT_EXCEEDED(404, "You can upload up to 10 images"),
     CATEGORY_NOT_FOUND(404, "Category not found");
 
     @Getter
