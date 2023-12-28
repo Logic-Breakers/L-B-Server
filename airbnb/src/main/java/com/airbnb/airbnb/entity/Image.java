@@ -25,7 +25,7 @@ public class Image {
 //    @JoinColumn(name = "stay_id")
 //    private Stay stay;
 
-    @Column
+    @Column(nullable = false)
     private String imageUrl;
 
     @Column(nullable = false)
