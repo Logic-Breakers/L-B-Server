@@ -32,6 +32,9 @@ public class StayService {
 
     @Transactional
     public void createStay(StayPostDto stayPostDto, Set<Long> categoryIds) {
+        if (stayPostDto.getStar() == null) {
+            stayPostDto.setStar(0.0);
+        }
         Stay stay = stayMapper.toStay(stayPostDto);
         List<StayCategories> setStayCategories = new ArrayList<>();
         for (Long categoryId : categoryIds) {
@@ -63,6 +66,10 @@ public class StayService {
                 .ifPresent(info -> findStay.setInfo(info));
         Optional.ofNullable(stayPatchDto.getCountry())
                 .ifPresent(country -> findStay.setCountry(country));
+        Optional.ofNullable(stayPatchDto.getGuest())
+                .ifPresent(guest -> findStay.setGuest(guest));
+        Optional.ofNullable(stayPatchDto.getStar())
+                .ifPresent(star -> findStay.setStar(star));
         Optional.ofNullable(stayPatchDto.getPropertyType())
                 .ifPresent(propertyType -> findStay.setPropertyType(propertyType));
         Optional.ofNullable(stayPatchDto.getCharge())
@@ -73,12 +80,14 @@ public class StayService {
                 .ifPresent(bedrooms -> findStay.setBedrooms(bedrooms));
         Optional.ofNullable(stayPatchDto.getBathrooms())
                 .ifPresent(bathrooms -> findStay.setBathrooms(bathrooms));
-        stayCategoriesRepository.deleteAllByStay_Id(id);
-        List<Long> categories = stayPatchDto.getCategories();
-        for (Long category : categories) {
-            StayCategories stayCategories = new StayCategories(findStay, categoryService.findVerifiedCategory(category));
-            stayCategoriesRepository.save(stayCategories);
-        }
+        Optional.ofNullable(stayPatchDto.getCategories())
+                .ifPresent(categories -> {
+                        stayCategoriesRepository.deleteAllByStay_Id(id);
+//                        List<Long> categories = stayPatchDto.getCategories();
+                        for (Long category : categories) {
+                        StayCategories stayCategories = new StayCategories(findStay, categoryService.findVerifiedCategory(category));
+                        stayCategoriesRepository.save(stayCategories);
+                        }});
         stayRepository.save(findStay);
     }
 

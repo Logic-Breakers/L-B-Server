@@ -12,6 +12,8 @@ public class StayResponseDto {
 
     private Long id;
     private String info;
+    private Long guest;
+    private Double star;
     private Stay.PropertyType propertyType;
     private String country;
     private Long charge;

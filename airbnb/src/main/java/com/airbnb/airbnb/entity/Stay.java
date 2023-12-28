@@ -29,6 +29,12 @@ public class Stay {
     @Column(nullable = false)
     private String country;
 
+    @Column(nullable = false)
+    private Long guest; //사용 가능 인원
+
+    @Column
+    private Double star; //별점
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PropertyType propertyType;
@@ -60,5 +66,6 @@ public class Stay {
     @OneToMany(mappedBy = "stay", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<StayCategories> stayCategories = new ArrayList<>();
 
-
+//    @OneToMany(mappedBy = "stay", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//    private List<Image> images = new ArrayList<>();
 }
