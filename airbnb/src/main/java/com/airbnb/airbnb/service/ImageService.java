@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ImageService {
             }
             validateFileExists(multipartFile);
 
-            String fileName = multipartFile.getOriginalFilename();
+            String fileName = renameFile(multipartFile.getOriginalFilename());
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(multipartFile.getContentType());
 
@@ -51,15 +52,27 @@ public class ImageService {
             }
 
             String imageUrl = amazonS3Client.getUrl(bucketName, fileName).toString();
-            Image uploadImage = new Image();
-            uploadImage.setImageUrl(imageUrl);
-            uploadImage.setUploadedAt(LocalDateTime.now());
-            imageRepository.save(uploadImage);
+            imageRepository.save(createImage(imageUrl));
         }
         log.info("이미지 업로드 완료");
         return imageUrls;
 
-}
+    }
+
+    private Image createImage(String imageUrl) {
+        Image image = new Image();
+        image.setImageUrl(imageUrl);
+        image.setUploadedAt(LocalDateTime.now());
+        return image;
+    }
+
+    private String renameFile(String fileName) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime now = LocalDateTime.now();
+        String formattedDateTime = now.format(formatter);
+        String renameName = fileName + "_" + formattedDateTime;
+        return renameName;
+    }
 
     private void validateFileExists(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
