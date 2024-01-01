@@ -73,14 +73,20 @@ public class StayService {
                 .ifPresent(info -> findStay.setInfo(info));
         Optional.ofNullable(stayPatchDto.getCountry())
                 .ifPresent(country -> findStay.setCountry(country));
+        Optional.ofNullable(stayPatchDto.getAddress())
+                .ifPresent(address -> findStay.setAddress(address));
+        Optional.ofNullable(stayPatchDto.isGuestFavourite())
+                .ifPresent(guestFavourite -> findStay.setGuestFavourite(guestFavourite));
         Optional.ofNullable(stayPatchDto.getGuest())
                 .ifPresent(guest -> findStay.setGuest(guest));
         Optional.ofNullable(stayPatchDto.getStar())
                 .ifPresent(star -> findStay.setStar(star));
+        Optional.ofNullable(stayPatchDto.getPlaceType())
+                .ifPresent(placeType -> findStay.setPlaceType(placeType));
         Optional.ofNullable(stayPatchDto.getPropertyType())
                 .ifPresent(propertyType -> findStay.setPropertyType(propertyType));
-        Optional.ofNullable(stayPatchDto.getCharge())
-                .ifPresent(charge -> findStay.setCharge(charge));
+        Optional.ofNullable(stayPatchDto.getPrice())
+                .ifPresent(price -> findStay.setPrice(price));
         Optional.ofNullable(stayPatchDto.getBeds())
                 .ifPresent(beds -> findStay.setBeds(beds));
         Optional.ofNullable(stayPatchDto.getBedrooms())
@@ -119,20 +125,43 @@ public class StayService {
         ));
     }
     @Transactional
-    public List<Stay> findStaysByFilter(int page, int size, String country, Long beds, Long bathrooms, Stay.PropertyType propertyType) {
+    public List<Stay> findStaysByFilter(int page, int size, String country, Stay.PlaceType placeType, Long minPrice, Long maxPrice, Boolean guestFavourite, Long beds, Long bathrooms, Stay.PropertyType propertyType) {
         Specification<Stay> specification = (root, query, criteriaBuilder) -> null;
+
         if (country != null) {
             specification = specification.and(StaySpecification.equalCountry(country));
         }
+
+        if (placeType != null) {
+            specification = specification.and(StaySpecification.equalPlaceType(placeType));
+        }
+
+        if (minPrice != null && maxPrice != null) {
+            specification = specification.and(StaySpecification.filterByPriceRange(minPrice, maxPrice));
+        } else if (minPrice != null && maxPrice == null) {
+            specification = specification.and(StaySpecification.filterByPriceRange(minPrice,9999999999L));
+        }
+        else if (minPrice == null && maxPrice != null) {
+            specification = specification.and(StaySpecification.filterByPriceRange(0L, maxPrice));
+        }
+        else {specification = specification.and(StaySpecification.filterByPriceRange(0L,9999999999L));}
+
+        if (guestFavourite != null) {
+            specification = specification.and(StaySpecification.equalGuestFavourite(guestFavourite));
+        }
+
         if (beds != null) {
             specification = specification.and(StaySpecification.equalBeds(beds));
         }
+
         if (bathrooms != null) {
             specification = specification.and(StaySpecification.equalBathrooms(bathrooms));
         }
+
         if (propertyType != null) {
             specification = specification.and(StaySpecification.equalPropertyType(propertyType));
         }
+
         return stayRepository.findAll(specification, PageRequest.of(page-1, size, Sort.by("id").descending())).getContent();
     }
 
