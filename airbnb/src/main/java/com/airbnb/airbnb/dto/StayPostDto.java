@@ -19,13 +19,19 @@ public class StayPostDto {
     private String info;
     @NotBlank(message = "국가를 입력해야 합니다.")
     private String country;
+    @NotBlank(message = "주소를 입력해야 합니다.")
+    private String address;
     @NotNull(message = "사용 가능 인원을 입력해야 합니다.")
     private Long guest;
     private Double star;
+    @NotNull(message = "게스트 선호를 입력해야 합니다.")
+    private boolean guestFavourite;
     @NotNull(message = "숙소 유형을 입력해야 합니다.")
+    private Stay.PlaceType placeType;
+    @NotNull(message = "건물 유형을 입력해야 합니다.")
     private Stay.PropertyType propertyType;
     @NotNull(message = "평균 금액을 입력해야 합니다.")
-    private Long charge;
+    private Long price;
     @NotNull(message = "침대 개수를 입력해야 합니다.")
     private Long beds;
     @NotNull(message = "침실 개수를 입력해야 합니다.")

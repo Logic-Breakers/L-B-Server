@@ -35,9 +35,25 @@ public class Stay {
     @Column
     private Double star; //별점
 
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private boolean guestFavourite; //게스트 선호
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PropertyType propertyType;
+    private PlaceType placeType; //숙소 유형
+
+    public enum PlaceType {
+        ANY_TYPE,
+        ROOM,
+        ENTIRE_HOME
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PropertyType propertyType; //건물 유형
 
     public enum PropertyType {
         HOUSE,
@@ -47,7 +63,7 @@ public class Stay {
     }
 
     @Column(nullable = false)
-    private Long charge;
+    private Long price;
 
     @Column(nullable = false)
     private Long beds;
