@@ -4,6 +4,7 @@ import com.airbnb.airbnb.dto.StayPatchDto;
 import com.airbnb.airbnb.dto.StayPostDto;
 import com.airbnb.airbnb.entity.Stay;
 import com.airbnb.airbnb.mapper.StayMapper;
+import com.airbnb.airbnb.service.ImageService;
 import com.airbnb.airbnb.service.StayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class StayController {
 
     private final StayMapper stayMapper;
     private final StayService stayService;
+    private final ImageService imageService;
 
     @Transactional
     @PostMapping
@@ -43,11 +45,16 @@ public class StayController {
 
     @Transactional
     @PatchMapping("/{stay-id}")
-    public ResponseEntity patchStay (@Valid @RequestBody StayPatchDto stayPatchDto,
-                                     @PathVariable("stay-id") Long id){
-//                                     @RequestPart(value = "image") List<MultipartFile> images) {
-//        if (images == null) {}
+    public ResponseEntity patchStay (@Valid @RequestPart(value = "stay") StayPatchDto stayPatchDto,
+                                     @PathVariable("stay-id") Long id,
+                                     @RequestPart(value = "image", required = false) List<MultipartFile> images) {
+
         stayService.updateStay(stayPatchDto,id);
+
+        //patch시 이미지 첨부 안 했을 때는 있던 그대로, 첨부한 경우엔 추가 업로드 (DB에는 이전에 업로드한 이미지 + 새로 업로드한 이미지)
+        if (images != null && !images.isEmpty()) {
+            imageService.uploadImage(images,stayService.findVerifiedStay(id));
+        }
         return new ResponseEntity("숙소 정보 수정이 완료되었습니다.", HttpStatus.OK);
     }
 
