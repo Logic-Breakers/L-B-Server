@@ -1,5 +1,6 @@
 package com.airbnb.airbnb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Image {
 
     @ManyToOne
     @JoinColumn(name = "stay_id")
+    @JsonIgnore
     private Stay stay;
 
     @Column(nullable = false)
