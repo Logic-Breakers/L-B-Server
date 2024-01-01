@@ -28,6 +28,9 @@ public class Image {
     private Stay stay;
 
     @Column(nullable = false)
+    private String fileName;
+
+    @Column(nullable = false)
     private String imageUrl;
 
     @Column(nullable = false)
