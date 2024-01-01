@@ -21,9 +21,9 @@ public class Image {
     @Column(nullable = false)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "stay_id")
-//    private Stay stay;
+    @ManyToOne
+    @JoinColumn(name = "stay_id")
+    private Stay stay;
 
     @Column(nullable = false)
     private String imageUrl;

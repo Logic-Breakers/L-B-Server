@@ -1,6 +1,7 @@
 package com.airbnb.airbnb.service;
 
 import com.airbnb.airbnb.entity.Image;
+import com.airbnb.airbnb.entity.Stay;
 import com.airbnb.airbnb.exception.BusinessLogicException;
 import com.airbnb.airbnb.exception.ExceptionCode;
 import com.airbnb.airbnb.repository.ImageRepository;
@@ -31,9 +32,9 @@ public class ImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
-    public List<String> uploadImage(List<MultipartFile> multipartFiles) {
+    public List<Image> uploadImage(List<MultipartFile> multipartFiles, Stay stay) {
         log.info("이미지 업로드 중");
-        List<String> imageUrls = new ArrayList<>();
+        List<Image> uploadImages = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if (multipartFiles.size() > 10) {
                 throw new BusinessLogicException(ExceptionCode.IMAGE_LIMIT_EXCEEDED);
@@ -52,17 +53,20 @@ public class ImageService {
             }
 
             String imageUrl = amazonS3Client.getUrl(bucketName, fileName).toString();
-            imageRepository.save(createImage(imageUrl));
+            Image uploadImage = createImage(imageUrl, stay);
+            uploadImages.add(uploadImage);
+            imageRepository.save(uploadImage);
         }
         log.info("이미지 업로드 완료");
-        return imageUrls;
+        return uploadImages;
 
     }
 
-    private Image createImage(String imageUrl) {
+    private Image createImage(String imageUrl, Stay stay) {
         Image image = new Image();
         image.setImageUrl(imageUrl);
         image.setUploadedAt(LocalDateTime.now());
+        image.setStay(stay);
         return image;
     }
 

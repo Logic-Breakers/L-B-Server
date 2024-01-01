@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -28,14 +29,17 @@ public class StayService {
     private final StayMapper stayMapper;
     private final CategoryService categoryService;
     private final StayCategoriesRepository stayCategoriesRepository;
+    private final ImageService imageService;
 
 
     @Transactional
-    public void createStay(StayPostDto stayPostDto, Set<Long> categoryIds) {
+    public void createStay(StayPostDto stayPostDto, Set<Long> categoryIds, List<MultipartFile> images) {
         if (stayPostDto.getStar() == null) {
             stayPostDto.setStar(0.0);
         }
         Stay stay = stayMapper.toStay(stayPostDto);
+
+        //category 설정
         List<StayCategories> setStayCategories = new ArrayList<>();
         for (Long categoryId : categoryIds) {
             Category category = categoryService.findVerifiedCategory(categoryId);
@@ -44,6 +48,9 @@ public class StayService {
             stayCategoriesRepository.save(stayCategories);
         }
         stay.setStayCategories(setStayCategories);
+
+        //이미지 업로드
+        stay.setImages(imageService.uploadImage(images, stay));
         stayRepository.save(stay);
     }
 
@@ -83,7 +90,6 @@ public class StayService {
         Optional.ofNullable(stayPatchDto.getCategories())
                 .ifPresent(categories -> {
                         stayCategoriesRepository.deleteAllByStay_Id(id);
-//                        List<Long> categories = stayPatchDto.getCategories();
                         for (Long category : categories) {
                         StayCategories stayCategories = new StayCategories(findStay, categoryService.findVerifiedCategory(category));
                         stayCategoriesRepository.save(stayCategories);

@@ -66,6 +66,6 @@ public class Stay {
     @OneToMany(mappedBy = "stay", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<StayCategories> stayCategories = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "stay", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    private List<Image> images = new ArrayList<>();
+    @OneToMany(mappedBy = "stay", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Image> images = new ArrayList<>();
 }

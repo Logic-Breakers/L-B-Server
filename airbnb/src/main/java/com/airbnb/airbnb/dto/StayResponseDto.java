@@ -5,6 +5,8 @@ import com.airbnb.airbnb.entity.Stay;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -20,4 +22,5 @@ public class StayResponseDto {
     private Long beds;
     private Long bedrooms;
     private Long bathrooms;
+    private List<String> imageUrls;
 }

@@ -6,14 +6,15 @@ import com.airbnb.airbnb.entity.Stay;
 import com.airbnb.airbnb.mapper.StayMapper;
 import com.airbnb.airbnb.service.StayService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -27,9 +28,10 @@ public class StayController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity postStay (@Valid @RequestBody StayPostDto stayPostDto,
-                                    @RequestParam Set<Long> categoryIds) {
-        stayService.createStay(stayPostDto, categoryIds);
+    public ResponseEntity postStay (@Valid @RequestPart(value = "stay") StayPostDto stayPostDto,
+                                    @RequestParam Set<Long> categoryIds,
+                                    @RequestPart(value = "image") List<MultipartFile> images) {
+        stayService.createStay(stayPostDto, categoryIds, images);
         return new ResponseEntity("숙소 등록이 완료되었습니다.", HttpStatus.CREATED);
     }
 
@@ -42,7 +44,9 @@ public class StayController {
     @Transactional
     @PatchMapping("/{stay-id}")
     public ResponseEntity patchStay (@Valid @RequestBody StayPatchDto stayPatchDto,
-                                    @PathVariable("stay-id") Long id) {
+                                     @PathVariable("stay-id") Long id){
+//                                     @RequestPart(value = "image") List<MultipartFile> images) {
+//        if (images == null) {}
         stayService.updateStay(stayPatchDto,id);
         return new ResponseEntity("숙소 정보 수정이 완료되었습니다.", HttpStatus.OK);
     }
