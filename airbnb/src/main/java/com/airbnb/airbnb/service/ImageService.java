@@ -7,6 +7,7 @@ import com.airbnb.airbnb.exception.ExceptionCode;
 import com.airbnb.airbnb.repository.ImageRepository;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,7 @@ public class ImageService {
             }
 
             String imageUrl = amazonS3Client.getUrl(bucketName, fileName).toString();
-            Image uploadImage = createImage(imageUrl, stay);
+            Image uploadImage = createImage(fileName, imageUrl, stay);
             uploadImages.add(uploadImage);
             imageRepository.save(uploadImage);
         }
@@ -62,8 +63,9 @@ public class ImageService {
 
     }
 
-    private Image createImage(String imageUrl, Stay stay) {
+    private Image createImage(String fileName, String imageUrl, Stay stay) {
         Image image = new Image();
+        image.setFileName(fileName);
         image.setImageUrl(imageUrl);
         image.setUploadedAt(LocalDateTime.now());
         image.setStay(stay);
@@ -82,5 +84,19 @@ public class ImageService {
         if (multipartFile.isEmpty()) {
             throw new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND);
         }
+    }
+
+    public Image findVerifiedImage(Long id) {
+        return imageRepository.findById(id)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.IMAGE_NOT_FOUND));
+    }
+
+    public void removeImage(Long id) {
+        log.info("이미지 삭제 중");
+        String key = findVerifiedImage(id).getFileName();
+        DeleteObjectRequest request = new DeleteObjectRequest(bucketName, key);
+        amazonS3Client.deleteObject(request);
+        imageRepository.delete(findVerifiedImage(id));
+        log.info("이미지 삭제 완료");
     }
 }
