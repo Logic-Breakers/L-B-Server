@@ -47,13 +47,13 @@ public class ImageService {
             objectMetadata.setContentType(multipartFile.getContentType());
 
             try (InputStream inputStream = multipartFile.getInputStream()) {
-                amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
+                amazonS3Client.putObject(new PutObjectRequest(bucketName, "stay/"+fileName, inputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
             } catch (IOException e) {
                 log.error("이미지 업로드 중 에러가 발생했습니다.");
             }
 
-            String imageUrl = amazonS3Client.getUrl(bucketName, fileName).toString();
+            String imageUrl = amazonS3Client.getUrl(bucketName, "stay/"+fileName).toString();
             Image uploadImage = createImage(fileName, imageUrl, stay);
             uploadImages.add(uploadImage);
             imageRepository.save(uploadImage);
