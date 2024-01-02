@@ -69,14 +69,14 @@ public class StayController {
     @GetMapping
     public ResponseEntity getStays (@Positive @RequestParam int page,
                                     @Positive @RequestParam int size) {
-        return new ResponseEntity(stayService.findStays(page, size), HttpStatus.OK);
+        return new ResponseEntity(stayMapper.toStayResponseDtos(stayService.findStays(page, size)), HttpStatus.OK);
     }
     @Transactional
     @GetMapping("/category/{category-id}")
     public ResponseEntity getStaysByCategory (@Positive @RequestParam int page,
                                               @Positive @RequestParam int size,
                                               @PathVariable("category-id") Long categoryId) {
-        return new ResponseEntity(stayService.findStaysByCategory(page, size, categoryId), HttpStatus.OK);
+        return new ResponseEntity(stayMapper.toStayResponseDtos(stayService.findStaysByCategory(page, size, categoryId)), HttpStatus.OK);
     }
 
     @Transactional
@@ -84,7 +84,7 @@ public class StayController {
     public ResponseEntity getStaysByCountry (@Positive @RequestParam int page,
                                              @Positive @RequestParam int size,
                                              @RequestParam(required = false, defaultValue = "대한민국") String country) {
-        return new ResponseEntity(stayService.findStaysByCountry(page, size, country), HttpStatus.OK);
+        return new ResponseEntity(stayMapper.toStayResponseDtos(stayService.findStaysByCountry(page, size, country)), HttpStatus.OK);
     }
     @Transactional
     @GetMapping("/filter")
@@ -98,6 +98,6 @@ public class StayController {
                                             @RequestParam(required = false) Long beds,
                                             @RequestParam(required = false) Long bathrooms,
                                             @RequestParam(required = false) Stay.PropertyType propertyType) {
-        return new ResponseEntity(stayService.findStaysByFilter(page, size, country, placeType, minPrice, maxPrice, guestFavourite, beds, bathrooms, propertyType), HttpStatus.OK);
+        return new ResponseEntity(stayMapper.toStayResponseDtos(stayService.findStaysByFilter(page, size, country, placeType, minPrice, maxPrice, guestFavourite, beds, bathrooms, propertyType)), HttpStatus.OK);
     }
 }
