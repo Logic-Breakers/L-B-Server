@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -20,6 +23,9 @@ public class User {
     private String username;
 
     @Column(nullable = false)
+    private LocalDateTime birthDate;
+
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -29,5 +35,8 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 }
 
