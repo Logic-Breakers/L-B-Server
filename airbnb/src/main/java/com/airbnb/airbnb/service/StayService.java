@@ -54,13 +54,13 @@ public class StayService {
         stayRepository.save(stay);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Stay findVerifiedStay (Long id) {
         return stayRepository.findById(id)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STAY_NOT_FOUND));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Stay> findStays (int page, int size) {
         Page<Stay> pageStays = stayRepository.findAll(PageRequest.of(page-1, size, Sort.by("id").descending()));
         return pageStays.getContent();
@@ -108,7 +108,7 @@ public class StayService {
         stayRepository.delete(findVerifiedStay(id));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Stay> findStaysByCategory (int page, int size, Long categoryId) {
         List<StayCategories> staysByCategory = stayCategoriesRepository.findAllByCategory_Id(categoryId,PageRequest.of(page-1, size, Sort.by("id").descending()));
         List<Stay> stays = new ArrayList<>();
@@ -119,12 +119,12 @@ public class StayService {
         return stays;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Stay> findStaysByCountry (int page, int size, String country) {
         return stayRepository.findAllByCountry(country,PageRequest.of(page-1, size, Sort.by("id").descending()
         ));
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Stay> findStaysByFilter(int page, int size, String country, Stay.PlaceType placeType, Long minPrice, Long maxPrice, Boolean guestFavourite, Long beds, Long bathrooms, Stay.PropertyType propertyType) {
         Specification<Stay> specification = (root, query, criteriaBuilder) -> null;
 

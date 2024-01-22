@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Category findVerifiedCategory (Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(()-> new BusinessLogicException(ExceptionCode.CATEGORY_NOT_FOUND));
