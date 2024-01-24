@@ -3,6 +3,7 @@ package com.airbnb.airbnb.mapper;
 import com.airbnb.airbnb.dto.StayPatchDto;
 import com.airbnb.airbnb.dto.StayPostDto;
 import com.airbnb.airbnb.dto.StayResponseDto;
+import com.airbnb.airbnb.dto.StaySumResponseDto;
 import com.airbnb.airbnb.entity.Image;
 import com.airbnb.airbnb.entity.Stay;
 import org.mapstruct.Mapper;
@@ -43,4 +44,17 @@ public interface StayMapper {
         return stayResponseDto;
     }
     List<StayResponseDto> toStayResponseDtos (List<Stay> stays);
+
+    default StaySumResponseDto toStaySumResponseDto (Stay stay) {
+        if (stay == null)  {
+            return null;
+        }
+        StaySumResponseDto staySumResponseDto = new StaySumResponseDto();
+        staySumResponseDto.setId(stay.getId());
+        staySumResponseDto.setHouseName(stay.getHouseName());
+        staySumResponseDto.setCreatedAt(stay.getCreatedAt());
+        return staySumResponseDto;
+    }
+
+    List<StaySumResponseDto> toStaySumResponseDtos (List<Stay> stays);
 }
