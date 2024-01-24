@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 public class StayPatchDto {
 
+    private String houseName;
     private String info;
     private String country;
     private String address;

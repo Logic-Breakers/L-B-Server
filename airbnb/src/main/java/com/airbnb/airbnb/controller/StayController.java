@@ -69,7 +69,7 @@ public class StayController {
     @GetMapping
     public ResponseEntity getStays (@Positive @RequestParam int page,
                                     @Positive @RequestParam int size) {
-        return new ResponseEntity(stayMapper.toStayResponseDtos(stayService.findStays(page, size)), HttpStatus.OK);
+        return new ResponseEntity(stayMapper.toStaySumResponseDtos(stayService.findStays(page, size)), HttpStatus.OK);
     }
     @Transactional
     @GetMapping("/category/{category-id}")

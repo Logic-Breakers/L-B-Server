@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -38,6 +39,7 @@ public class StayService {
             stayPostDto.setStar(0.0);
         }
         Stay stay = stayMapper.toStay(stayPostDto);
+        stay.setCreatedAt(LocalDateTime.now());
 
         //category 설정
         List<StayCategories> setStayCategories = new ArrayList<>();
@@ -69,6 +71,8 @@ public class StayService {
     @Transactional
     public void updateStay (StayPatchDto stayPatchDto, Long id) {
         Stay findStay = findVerifiedStay(id);
+        Optional.ofNullable(stayPatchDto.getHouseName())
+                .ifPresent(houseName -> findStay.setHouseName(houseName));
         Optional.ofNullable(stayPatchDto.getInfo())
                 .ifPresent(info -> findStay.setInfo(info));
         Optional.ofNullable(stayPatchDto.getCountry())
