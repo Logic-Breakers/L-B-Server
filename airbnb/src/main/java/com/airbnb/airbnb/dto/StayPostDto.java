@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class StayPostDto {
 
+    @NotBlank(message = "이름은 공백이 아니어야 합니다.")
+    private String houseName;
     @NotBlank(message = "설명은 공백이 아니어야 합니다.")
     private String info;
     @NotBlank(message = "국가를 입력해야 합니다.")

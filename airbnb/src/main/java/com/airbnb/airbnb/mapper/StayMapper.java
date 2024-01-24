@@ -20,6 +20,7 @@ public interface StayMapper {
         }
         StayResponseDto stayResponseDto = new StayResponseDto();
         stayResponseDto.setId(stay.getId());
+        stayResponseDto.setHouseName(stay.getHouseName());
         stayResponseDto.setInfo(stay.getInfo());
         stayResponseDto.setCountry(stay.getCountry());
         stayResponseDto.setAddress(stay.getAddress());
@@ -32,6 +33,7 @@ public interface StayMapper {
         stayResponseDto.setBeds(stay.getBeds());
         stayResponseDto.setBedrooms(stay.getBedrooms());
         stayResponseDto.setBathrooms(stay.getBathrooms());
+        stayResponseDto.setCreatedAt(stay.getCreatedAt());
         if (stay.getImages() != null) {
             List<Image> images = stay.getImages();
             for (Image image : images) {

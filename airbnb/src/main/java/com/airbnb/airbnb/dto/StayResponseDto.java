@@ -5,6 +5,7 @@ import com.airbnb.airbnb.entity.Stay;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class StayResponseDto {
 
     private Long id;
+    private String houseName;
     private String info;
     private String country;
     private String address;
@@ -27,6 +29,7 @@ public class StayResponseDto {
     private Long bedrooms;
     private Long bathrooms;
     private List<String> imageUrls = new ArrayList<>();
+    private LocalDateTime createdAt;
 
     public void addImageUrl(Image image) {
         imageUrls.add(image.getImageUrl());
