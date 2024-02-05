@@ -1,4 +1,4 @@
-package com.airbnb.airbnb;
+package com.airbnb.airbnb.auth.filter;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

@@ -1,4 +1,4 @@
-package com.airbnb.airbnb.entity;
+package com.airbnb.airbnb.stay.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,11 +14,10 @@ import java.time.LocalDateTime;
 @Table
 @AllArgsConstructor
 @NoArgsConstructor
-public class Image {
+public class StayCategories {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
     @ManyToOne
@@ -27,12 +25,14 @@ public class Image {
     @JsonIgnore
     private Stay stay;
 
-    @Column(nullable = false)
-    private String fileName;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @JsonIgnore
+    private Category category;
 
-    @Column(nullable = false)
-    private String imageUrl;
+    public StayCategories(Stay stay, Category verifiedCategory) {
+        this.stay = stay;
+        this.category = verifiedCategory;
+    }
 
-    @Column(nullable = false)
-    private LocalDateTime uploadedAt;
 }

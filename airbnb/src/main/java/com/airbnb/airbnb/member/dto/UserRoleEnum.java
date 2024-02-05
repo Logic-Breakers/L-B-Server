@@ -1,4 +1,4 @@
-package com.airbnb.airbnb.entity;
+package com.airbnb.airbnb.member.dto;
 
 public enum UserRoleEnum {
     USER(Authority.USER), //==ROLE_USER

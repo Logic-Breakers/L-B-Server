@@ -1,6 +1,5 @@
-package com.airbnb.airbnb.dto;
+package com.airbnb.airbnb.member.dto;
 
-import com.airbnb.airbnb.entity.UserRoleEnum;
 import lombok.Getter;
 import lombok.Setter;
 

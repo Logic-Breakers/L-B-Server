@@ -1,9 +1,9 @@
-package com.airbnb.airbnb.mapper;
+package com.airbnb.airbnb.member.mapper;
 
-import com.airbnb.airbnb.dto.MemberPatchDto;
-import com.airbnb.airbnb.dto.MemberPostDto;
-import com.airbnb.airbnb.dto.MemberResponseDto;
-import com.airbnb.airbnb.entity.Member;
+import com.airbnb.airbnb.member.dto.MemberPatchDto;
+import com.airbnb.airbnb.member.dto.MemberPostDto;
+import com.airbnb.airbnb.member.dto.MemberResponseDto;
+import com.airbnb.airbnb.member.entity.Member;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

@@ -1,8 +1,8 @@
-package com.airbnb.airbnb.controller;
+package com.airbnb.airbnb.image.controller;
 
-import com.airbnb.airbnb.entity.Image;
-import com.airbnb.airbnb.entity.Stay;
-import com.airbnb.airbnb.service.ImageService;
+import com.airbnb.airbnb.image.entity.Image;
+import com.airbnb.airbnb.stay.entity.Stay;
+import com.airbnb.airbnb.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

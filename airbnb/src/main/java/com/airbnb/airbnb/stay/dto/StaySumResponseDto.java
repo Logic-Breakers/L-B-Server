@@ -1,4 +1,4 @@
-package com.airbnb.airbnb.dto;
+package com.airbnb.airbnb.stay.dto;
 
 import lombok.Getter;
 import lombok.Setter;

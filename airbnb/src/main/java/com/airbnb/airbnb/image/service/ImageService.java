@@ -1,7 +1,7 @@
-package com.airbnb.airbnb.service;
+package com.airbnb.airbnb.image.service;
 
-import com.airbnb.airbnb.entity.Image;
-import com.airbnb.airbnb.entity.Stay;
+import com.airbnb.airbnb.image.entity.Image;
+import com.airbnb.airbnb.stay.entity.Stay;
 import com.airbnb.airbnb.exception.BusinessLogicException;
 import com.airbnb.airbnb.exception.ExceptionCode;
 import com.airbnb.airbnb.repository.ImageRepository;
