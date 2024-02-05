@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPostDto {
+public class MemberPostDto {
     @NotBlank(message = "성명을 입력해야 합니다.")
     private String username;
 
@@ -24,8 +24,8 @@ public class UserPostDto {
     @NotBlank(message = "비밀번호를 입력해야 합니다.")
     private String password;
 
-    @NotNull(message = "사용자 유형을 입력해야 합니다.")
-    private UserRoleEnum role;
+//    @NotNull(message = "사용자 유형을 입력해야 합니다.")
+//    private UserRoleEnum role;
 
     private LocalDateTime createdAt;
 

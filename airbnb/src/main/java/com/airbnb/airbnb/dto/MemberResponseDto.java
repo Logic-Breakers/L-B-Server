@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserResponseDto {
+public class MemberResponseDto {
 
     private String username;
     private LocalDateTime birthDate;
     private String email;
     private String password;
-    private UserRoleEnum role;
+//    private UserRoleEnum role;
     private LocalDateTime createdAt;
 }
