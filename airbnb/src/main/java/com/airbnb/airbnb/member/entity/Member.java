@@ -1,4 +1,4 @@
-package com.airbnb.airbnb.entity;
+package com.airbnb.airbnb.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -28,6 +28,12 @@ public class Member {
 
     @Column(nullable = false)
     private LocalDateTime birthDate;
+
+    @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
+    private String phone;
 
     @Column(nullable = false)
     private String email;

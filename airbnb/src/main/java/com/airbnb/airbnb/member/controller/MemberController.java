@@ -1,8 +1,8 @@
 package com.airbnb.airbnb.member.controller;
 
-import com.airbnb.airbnb.dto.MemberPatchDto;
-import com.airbnb.airbnb.dto.MemberPostDto;
-import com.airbnb.airbnb.mapper.MemberMapper;
+import com.airbnb.airbnb.member.dto.MemberPatchDto;
+import com.airbnb.airbnb.member.dto.MemberPostDto;
+import com.airbnb.airbnb.member.mapper.MemberMapper;
 import com.airbnb.airbnb.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

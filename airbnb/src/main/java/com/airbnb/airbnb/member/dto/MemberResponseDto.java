@@ -11,8 +11,9 @@ public class MemberResponseDto {
 
     private String username;
     private LocalDateTime birthDate;
+    private String country;
+    private String phone;
     private String email;
-    private String password;
 //    private UserRoleEnum role;
     private LocalDateTime createdAt;
 }

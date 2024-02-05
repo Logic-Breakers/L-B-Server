@@ -1,12 +1,12 @@
 package com.airbnb.airbnb.member.service;
 
-import com.airbnb.airbnb.MemberRegistrationApplicationEvent;
-import com.airbnb.airbnb.dto.MemberPatchDto;
-import com.airbnb.airbnb.dto.MemberPostDto;
-import com.airbnb.airbnb.entity.Member;
+import com.airbnb.airbnb.member.event.MemberRegistrationApplicationEvent;
+import com.airbnb.airbnb.member.dto.MemberPatchDto;
+import com.airbnb.airbnb.member.dto.MemberPostDto;
+import com.airbnb.airbnb.member.entity.Member;
 import com.airbnb.airbnb.exception.BusinessLogicException;
 import com.airbnb.airbnb.exception.ExceptionCode;
-import com.airbnb.airbnb.mapper.MemberMapper;
+import com.airbnb.airbnb.member.mapper.MemberMapper;
 import com.airbnb.airbnb.member.repository.MemberRepository;
 import com.airbnb.airbnb.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
@@ -48,10 +48,14 @@ public class MemberService {
     @Transactional
     public void updateMember(MemberPatchDto memberPatchDto, Long id) {
         Member findMember = findVerifiedMember(id);
+        Optional.ofNullable(memberPatchDto.getName())
+                .ifPresent(username -> findMember.setUsername(username));
+        Optional.ofNullable(memberPatchDto.getPhone())
+                .ifPresent(phone -> findMember.setPhone(phone));
         Optional.ofNullable(memberPatchDto.getEmail())
                 .ifPresent(email -> findMember.setEmail(email));
         Optional.ofNullable(memberPatchDto.getPassword())
-                .ifPresent(password -> findMember.setPassword(password));
+                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
     }
 
     @Transactional
