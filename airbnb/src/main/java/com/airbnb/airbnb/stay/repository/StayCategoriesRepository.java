@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface StayCategoriesRepository extends JpaRepository<StayCategories, Long> {
 
-    List<StayCategories> findAllByCategory_Id(Long categoryId, Pageable pageable);
+    List<StayCategories> findAllByCategory_CategoryName(String categoryName, Pageable pageable);
     void deleteAllByStay_Id(Long stayId);
 }
