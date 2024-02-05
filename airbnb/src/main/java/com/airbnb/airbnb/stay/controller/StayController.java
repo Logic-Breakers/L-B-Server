@@ -31,9 +31,11 @@ public class StayController {
     @Transactional
     @PostMapping
     public ResponseEntity postStay (@Valid @RequestPart(value = "stay") StayPostDto stayPostDto,
-                                    @RequestParam Set<Long> categoryIds,
+//                                    @RequestParam Set<Long> categoryIds,
+                                    @RequestParam String categoryName,
                                     @RequestPart(value = "image") List<MultipartFile> images) {
-        stayService.createStay(stayPostDto, categoryIds, images);
+//        stayService.createStay(stayPostDto, categoryIds, images);
+          stayService.createStay(stayPostDto, categoryName, images);
         return new ResponseEntity("숙소 등록이 완료되었습니다.", HttpStatus.CREATED);
     }
 

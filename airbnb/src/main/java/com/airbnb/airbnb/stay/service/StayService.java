@@ -35,22 +35,32 @@ public class StayService {
 
 
     @Transactional
-    public void createStay(StayPostDto stayPostDto, Set<Long> categoryIds, List<MultipartFile> images) {
+    public void createStay(StayPostDto stayPostDto, String categoryName, List<MultipartFile> images) {
+//    카테고리 이름으로 등록하게 수정, 일단 카테고리 하나만 되게 수정
+//    public void createStay(StayPostDto stayPostDto, Set<Long> categoryIds, List<MultipartFile> images) {
         if (stayPostDto.getStar() == null) {
             stayPostDto.setStar(0.0);
         }
         Stay stay = stayMapper.toStay(stayPostDto);
         stay.setCreatedAt(LocalDateTime.now());
 
-        //category 설정
+        //카테고리 이름으로 등록하게 수정, 일단 카테고리 하나만 되게 수정
         List<StayCategories> setStayCategories = new ArrayList<>();
-        for (Long categoryId : categoryIds) {
-            Category category = categoryService.findVerifiedCategory(categoryId);
-            StayCategories stayCategories = new StayCategories(stay, category);
-            setStayCategories.add(stayCategories);
-            stayCategoriesRepository.save(stayCategories);
-        }
+        Category category = categoryService.findVerifiedCategoryByName(categoryName);
+        StayCategories stayCategories = new StayCategories(stay, category);
+        setStayCategories.add(stayCategories);
+        stayCategoriesRepository.save(stayCategories);
         stay.setStayCategories(setStayCategories);
+
+//        //category 설정
+//        List<StayCategories> setStayCategories = new ArrayList<>();
+//        for (Long categoryId : categoryIds) {
+//            Category category = categoryService.findVerifiedCategory(categoryId);
+//            StayCategories stayCategories = new StayCategories(stay, category);
+//            setStayCategories.add(stayCategories);
+//            stayCategoriesRepository.save(stayCategories);
+//        }
+//        stay.setStayCategories(setStayCategories);
 
         //이미지 업로드
         stay.setImages(imageService.uploadImage(images, stay));
