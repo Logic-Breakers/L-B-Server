@@ -1,6 +1,6 @@
 package com.airbnb.airbnb.member.repository;
 
-import com.airbnb.airbnb.entity.Member;
+import com.airbnb.airbnb.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
