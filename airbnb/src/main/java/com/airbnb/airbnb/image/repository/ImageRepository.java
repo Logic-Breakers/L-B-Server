@@ -1,4 +1,4 @@
-package com.airbnb.airbnb.repository;
+package com.airbnb.airbnb.image.repository;
 
 import com.airbnb.airbnb.image.entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.airbnb.airbnb.auth;
+package com.airbnb.airbnb.response;
 
 import com.airbnb.airbnb.response.ErrorResponse;
 import com.google.gson.Gson;

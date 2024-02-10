@@ -4,7 +4,7 @@ import com.airbnb.airbnb.image.entity.Image;
 import com.airbnb.airbnb.stay.entity.Stay;
 import com.airbnb.airbnb.exception.BusinessLogicException;
 import com.airbnb.airbnb.exception.ExceptionCode;
-import com.airbnb.airbnb.repository.ImageRepository;
+import com.airbnb.airbnb.image.repository.ImageRepository;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
