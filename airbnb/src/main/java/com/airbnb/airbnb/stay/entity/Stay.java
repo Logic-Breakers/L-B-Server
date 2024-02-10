@@ -1,6 +1,7 @@
 package com.airbnb.airbnb.stay.entity;
 
 import com.airbnb.airbnb.image.entity.Image;
+import com.airbnb.airbnb.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -79,10 +80,9 @@ public class Stay {
     @Column(nullable = false)
     private Long bathrooms;
 
-//    숙소 호스트의 user id
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "host_id")
+    private Member member;
 
     @OneToMany(mappedBy = "stay", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<StayCategories> stayCategories = new ArrayList<>();

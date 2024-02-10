@@ -1,5 +1,6 @@
 package com.airbnb.airbnb.member.entity;
 
+import com.airbnb.airbnb.stay.entity.Stay;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,6 +48,9 @@ public class Member {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.REMOVE})
+    private List<Stay> stay = new ArrayList<>();
 
     public Member(String email, String password, Collection<? extends GrantedAuthority> authorities) {
     }

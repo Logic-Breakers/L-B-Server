@@ -1,6 +1,7 @@
 package com.airbnb.airbnb.auth.filter;
 
 import com.airbnb.airbnb.auth.tokenizer.JwtTokenizer;
+import com.airbnb.airbnb.auth.userdetails.MemberDetailsService;
 import com.airbnb.airbnb.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -15,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.SignatureException;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import java.util.Map;
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils customAuthorityUtils;
+    private final MemberDetailsService memberDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -62,11 +64,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     //Authentication 객체를 SecurityContext에 저장
     private void setAuthenticationToContext(Map<String, Object> claims) {
-        String username = (String) claims.get("username");
+        UserDetails userDetails = memberDetailsService.loadUserByUsername((String) claims.get("username"));
         //claims를 기반으로 List<GrantedAuthority> 생성
         List<GrantedAuthority> authorities = customAuthorityUtils.createAuthorities((List)claims.get("roles"));
         //username과 List<GrantedAuthority>를 포함한 authentication 객체 생성
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
         //securityContext에 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

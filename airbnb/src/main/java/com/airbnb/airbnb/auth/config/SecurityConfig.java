@@ -5,6 +5,7 @@ import com.airbnb.airbnb.auth.filter.JwtVerificationFilter;
 import com.airbnb.airbnb.auth.handler.MemberAuthenticationFailureHandler;
 import com.airbnb.airbnb.auth.handler.MemberAuthenticationSuccessHandler;
 import com.airbnb.airbnb.auth.tokenizer.JwtTokenizer;
+import com.airbnb.airbnb.auth.userdetails.MemberDetailsService;
 import com.airbnb.airbnb.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 public class SecurityConfig {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils customAuthorityUtils;
+    private final MemberDetailsService memberDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -45,9 +47,10 @@ public class SecurityConfig {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.POST,"/user").permitAll()
+                        .antMatchers(HttpMethod.POST,"/user/signup").permitAll()
                         .antMatchers(HttpMethod.PATCH, "/user/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET,"/user/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE,"/user/**").hasRole("ADMIN")
                         .anyRequest().permitAll());
         return httpSecurity.build();
     }
@@ -78,7 +81,7 @@ public class SecurityConfig {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, customAuthorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, customAuthorityUtils, memberDetailsService);
             builder
                     .addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);

@@ -1,5 +1,7 @@
 package com.airbnb.airbnb.stay.service;
 
+import com.airbnb.airbnb.member.entity.Member;
+import com.airbnb.airbnb.member.service.MemberService;
 import com.airbnb.airbnb.stay.specification.StaySpecification;
 import com.airbnb.airbnb.image.service.ImageService;
 import com.airbnb.airbnb.stay.dto.StayPatchDto;
@@ -32,10 +34,11 @@ public class StayService {
     private final CategoryService categoryService;
     private final StayCategoriesRepository stayCategoriesRepository;
     private final ImageService imageService;
+    private final MemberService memberService;
 
 
     @Transactional
-    public void createStay(StayPostDto stayPostDto, String categoryName, List<MultipartFile> images) {
+    public void createStay(StayPostDto stayPostDto, String categoryName, List<MultipartFile> images, Member host) {
 //    카테고리 이름으로 등록하게 수정, 일단 카테고리 하나만 되게 수정
 //    public void createStay(StayPostDto stayPostDto, Set<Long> categoryIds, List<MultipartFile> images) {
         if (stayPostDto.getStar() == null) {
@@ -43,6 +46,7 @@ public class StayService {
         }
         Stay stay = stayMapper.toStay(stayPostDto);
         stay.setCreatedAt(LocalDateTime.now());
+        stay.setMember(host);
 
         //카테고리 이름으로 등록하게 수정, 일단 카테고리 하나만 되게 수정
         List<StayCategories> setStayCategories = new ArrayList<>();

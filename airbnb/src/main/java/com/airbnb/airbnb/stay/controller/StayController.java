@@ -1,5 +1,6 @@
 package com.airbnb.airbnb.stay.controller;
 
+import com.airbnb.airbnb.member.entity.Member;
 import com.airbnb.airbnb.stay.dto.StayPatchDto;
 import com.airbnb.airbnb.stay.dto.StayPostDto;
 import com.airbnb.airbnb.stay.entity.Stay;
@@ -9,6 +10,7 @@ import com.airbnb.airbnb.stay.service.StayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,13 +32,15 @@ public class StayController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity postStay (@Valid @RequestPart(value = "stay") StayPostDto stayPostDto,
+    public ResponseEntity postStay (@AuthenticationPrincipal Member host,
+                                    @Valid @RequestPart(value = "stay") StayPostDto stayPostDto,
 //                                    @RequestParam Set<Long> categoryIds,
                                     @RequestParam String categoryName,
                                     @RequestPart(value = "image") List<MultipartFile> images) {
 //        stayService.createStay(stayPostDto, categoryIds, images);
-          stayService.createStay(stayPostDto, categoryName, images);
-        return new ResponseEntity("숙소 등록이 완료되었습니다.", HttpStatus.CREATED);
+          stayService.createStay(stayPostDto, categoryName, images, host);
+
+          return new ResponseEntity("숙소 등록이 완료되었습니다.", HttpStatus.CREATED);
     }
 
     @Transactional

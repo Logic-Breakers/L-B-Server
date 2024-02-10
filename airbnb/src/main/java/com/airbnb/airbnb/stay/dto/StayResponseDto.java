@@ -15,6 +15,7 @@ import java.util.List;
 public class StayResponseDto {
 
     private Long id;
+    private Long hostId;
     private String houseName;
     private String info;
     private String country;

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class StaySumResponseDto {
     private Long id;
-    //private Long hostId;
+    private Long hostId;
     private String houseName;
     private LocalDateTime createdAt;
 }

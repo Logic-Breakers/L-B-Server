@@ -35,6 +35,7 @@ public interface StayMapper {
         stayResponseDto.setBedrooms(stay.getBedrooms());
         stayResponseDto.setBathrooms(stay.getBathrooms());
         stayResponseDto.setCreatedAt(stay.getCreatedAt());
+        stayResponseDto.setHostId(stay.getMember().getId());
         if (stay.getImages() != null) {
             List<Image> images = stay.getImages();
             for (Image image : images) {
@@ -53,6 +54,7 @@ public interface StayMapper {
         staySumResponseDto.setId(stay.getId());
         staySumResponseDto.setHouseName(stay.getHouseName());
         staySumResponseDto.setCreatedAt(stay.getCreatedAt());
+        staySumResponseDto.setHostId(stay.getMember().getId());
         return staySumResponseDto;
     }
 
