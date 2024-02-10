@@ -58,7 +58,7 @@ public class MemberService {
                 .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Member findVerifiedMember(Long id) {
         return memberRepository.findById(id)
                  .orElseThrow(()-> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
