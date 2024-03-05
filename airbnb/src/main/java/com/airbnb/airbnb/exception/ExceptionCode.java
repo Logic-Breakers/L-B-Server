@@ -8,7 +8,9 @@ public enum ExceptionCode {
     IMAGE_NOT_FOUND(404, "Image not found"),
     IMAGE_LIMIT_EXCEEDED(404, "You can upload up to 10 images"),
     MEMBER_NOT_FOUND(404, "Member not found"),
-    CATEGORY_NOT_FOUND(404, "Category not found");
+    CATEGORY_NOT_FOUND(404, "Category not found"),
+    LOGOUT(403,"Logged out account");
+
 
     @Getter
     private int status;
