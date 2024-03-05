@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class MemberResponseDto {
-
+    private Long id;
     private String username;
     private LocalDateTime birthDate;
     private String country;
