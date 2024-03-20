@@ -14,12 +14,16 @@ import java.util.List;
 @Setter
 public class StayResponseDto {
 
-    private Long id;
+    private Long houseId;
     private Long hostId;
     private String houseName;
+    private String hostName;
     private String info;
     private String country;
     private String address;
+    private String detailAddress;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Long guest;
     private Double star;
 //    private boolean guestFavourite;

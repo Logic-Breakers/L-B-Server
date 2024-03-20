@@ -44,6 +44,15 @@ public class Stay {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private String detailAddress;
+
+    @Column(nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(nullable = false)
+    private LocalDateTime endDate;
+
 //    @Column(nullable = false)
 //    private boolean guestFavourite; //게스트 선호
 

@@ -3,6 +3,8 @@ package com.airbnb.airbnb.stay.dto;
 import com.airbnb.airbnb.stay.entity.Stay;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -13,6 +15,9 @@ public class StayPatchDto {
     private String info;
     private String country;
     private String address;
+    private String detailAddress;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Long guest;
     private Double star;
 //    private boolean guestFavourite;

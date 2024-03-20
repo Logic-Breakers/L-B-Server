@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -22,6 +23,12 @@ public class StayPostDto {
     private String country;
     @NotBlank(message = "주소를 입력해야 합니다.")
     private String address;
+    @NotBlank(message = "상세 주소를 입력해야 합니다.")
+    private String detailAddress;
+    @NotNull(message = "시작 날짜를 입력해야 합니다.")
+    private LocalDateTime startDate;
+    @NotNull(message = "종료 날짜를 입력해야 합니다.")
+    private LocalDateTime endDate;
     @NotNull(message = "사용 가능 인원을 입력해야 합니다.")
     private Long guest;
     private Double star;

@@ -6,8 +6,10 @@ import com.airbnb.airbnb.stay.dto.StayPostDto;
 import com.airbnb.airbnb.stay.dto.StayResponseDto;
 import com.airbnb.airbnb.image.entity.Image;
 import com.airbnb.airbnb.stay.entity.Stay;
+import com.airbnb.airbnb.stay.entity.StayCategories;
 import org.mapstruct.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,7 +22,7 @@ public interface StayMapper {
             return null;
         }
         StayResponseDto stayResponseDto = new StayResponseDto();
-        stayResponseDto.setId(stay.getId());
+        stayResponseDto.setHouseId(stay.getId());
         stayResponseDto.setHouseName(stay.getHouseName());
         stayResponseDto.setInfo(stay.getInfo());
         stayResponseDto.setCountry(stay.getCountry());
@@ -36,6 +38,10 @@ public interface StayMapper {
         stayResponseDto.setBathrooms(stay.getBathrooms());
         stayResponseDto.setCreatedAt(stay.getCreatedAt());
         stayResponseDto.setHostId(stay.getMember().getId());
+        stayResponseDto.setHostName(stay.getMember().getUsername());
+        stayResponseDto.setDetailAddress(stay.getDetailAddress());
+        stayResponseDto.setStartDate(stay.getStartDate());
+        stayResponseDto.setEndDate(stay.getEndDate());
         if (stay.getImages() != null) {
             List<Image> images = stay.getImages();
             for (Image image : images) {
@@ -51,10 +57,23 @@ public interface StayMapper {
             return null;
         }
         StaySumResponseDto staySumResponseDto = new StaySumResponseDto();
-        staySumResponseDto.setId(stay.getId());
+        staySumResponseDto.setHouseId(stay.getId());
         staySumResponseDto.setHouseName(stay.getHouseName());
         staySumResponseDto.setCreatedAt(stay.getCreatedAt());
         staySumResponseDto.setHostId(stay.getMember().getId());
+        staySumResponseDto.setStar(stay.getStar());
+        staySumResponseDto.setPrice(stay.getPrice());
+        if (stay.getStayCategories() != null) {
+            List<StayCategories> stayCategories = stay.getStayCategories();
+            List<String> categoryName = new ArrayList<>();
+            for (StayCategories stayCategory : stayCategories) {
+                categoryName.add(stayCategory.getCategory().getCategoryName());
+            }
+            staySumResponseDto.setCategory(categoryName);
+        }
+        staySumResponseDto.setStartDate(stay.getStartDate());
+        staySumResponseDto.setEndDate(stay.getEndDate());
+
         return staySumResponseDto;
     }
 
