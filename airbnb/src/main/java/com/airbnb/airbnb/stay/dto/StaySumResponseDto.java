@@ -4,12 +4,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 public class StaySumResponseDto {
-    private Long id;
+    private Long houseId;
     private Long hostId;
     private String houseName;
     private LocalDateTime createdAt;
+    private Double star;
+    private Long price;
+    private List<String> category = new ArrayList<>();
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 }
