@@ -64,6 +64,13 @@ public class MemberService {
                  .orElseThrow(()-> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
+    public Member findVerifiedMember(Member member) {
+        Long id = member.getId();
+        return memberRepository.findById(id)
+                .orElseThrow(()-> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
 
     @Transactional
     public void removeMember(Long id) {
