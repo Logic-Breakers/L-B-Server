@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Getter
 @Setter
@@ -19,4 +18,5 @@ public class StaySumResponseDto {
     private String category;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private String houseImageUrl;
 }

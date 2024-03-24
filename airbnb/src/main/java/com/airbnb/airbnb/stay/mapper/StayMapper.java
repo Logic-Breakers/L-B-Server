@@ -7,8 +7,6 @@ import com.airbnb.airbnb.stay.dto.StayResponseDto;
 import com.airbnb.airbnb.image.entity.Image;
 import com.airbnb.airbnb.stay.entity.Stay;
 import org.mapstruct.Mapper;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -66,6 +64,10 @@ public interface StayMapper {
         staySumResponseDto.setCategory(stay.getCategory().getCategoryName());
         staySumResponseDto.setStartDate(stay.getStartDate());
         staySumResponseDto.setEndDate(stay.getEndDate());
+        if (stay.getImages() != null) {
+            List<Image> images = stay.getImages();
+                staySumResponseDto.setHouseImageUrl(images.get(0).getImageUrl());
+        }
 
         return staySumResponseDto;
     }
