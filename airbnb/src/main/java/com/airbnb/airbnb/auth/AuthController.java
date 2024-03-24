@@ -22,10 +22,6 @@ public class AuthController {
     private final RedisUtil redisUtil;
     private final AuthService authService;
 
-    @GetMapping("/auth/login")
-    public ResponseEntity login(HttpServletResponse response) {
-        return ResponseEntity.ok(authService.login(response));
-    }
 
     @DeleteMapping("/auth/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal Member member,

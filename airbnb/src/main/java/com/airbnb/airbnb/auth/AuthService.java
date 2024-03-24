@@ -22,11 +22,4 @@ public class AuthService {
         return "로그아웃 완료";
     }
 
-    public ResponseEntity login(HttpServletResponse response) {
-        TokenDto tokenDto = new TokenDto();
-        tokenDto.setAccessToken(response.getHeader("Authorization").replace("Bearer ", ""));
-        log.info("message",response.getHeader("Authorization").replace("Bearer ", ""));
-        tokenDto.setRefreshToken(response.getHeader("refresh"));
-        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
-    }
 }
