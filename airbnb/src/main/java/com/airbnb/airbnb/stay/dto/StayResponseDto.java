@@ -34,10 +34,10 @@ public class StayResponseDto {
     private Long beds;
     private Long bedrooms;
     private Long bathrooms;
-    private List<String> imageUrls = new ArrayList<>();
+    private List<String> houseImageUrls = new ArrayList<>();
     private LocalDateTime createdAt;
 
     public void addImageUrl(Image image) {
-        imageUrls.add(image.getImageUrl());
+        houseImageUrls.add(image.getImageUrl());
     }
 }
