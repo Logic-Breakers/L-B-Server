@@ -27,6 +27,5 @@ public class StayPatchDto {
     private Long beds;
     private Long bedrooms;
     private Long bathrooms;
-    private List<Long> categories;
 
 }
