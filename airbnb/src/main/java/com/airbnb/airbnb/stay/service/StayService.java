@@ -2,6 +2,7 @@ package com.airbnb.airbnb.stay.service;
 
 import com.airbnb.airbnb.member.entity.Member;
 import com.airbnb.airbnb.member.service.MemberService;
+import com.airbnb.airbnb.redis.util.RedisUtil;
 import com.airbnb.airbnb.stay.specification.StaySpecification;
 import com.airbnb.airbnb.image.service.ImageService;
 import com.airbnb.airbnb.stay.dto.StayPatchDto;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -35,26 +37,30 @@ public class StayService {
     private final StayCategoriesRepository stayCategoriesRepository;
     private final ImageService imageService;
     private final MemberService memberService;
+    private final RedisUtil redisUtil;
 
 
     @Transactional
-    public void createStay(StayPostDto stayPostDto, String categoryName, List<MultipartFile> images, Member host) {
+    public void createStay(StayPostDto stayPostDto, String categoryName, List<MultipartFile> images, Member host, HttpServletRequest request) {
 //    카테고리 이름으로 등록하게 수정, 일단 카테고리 하나만 되게 수정
 //    public void createStay(StayPostDto stayPostDto, Set<Long> categoryIds, List<MultipartFile> images) {
-        if (stayPostDto.getStar() == null) {
-            stayPostDto.setStar(0.0);
-        }
-        Stay stay = stayMapper.toStay(stayPostDto);
-        stay.setCreatedAt(LocalDateTime.now());
-        stay.setMember(host);
+        if (redisUtil.hasKey(request.getHeader("Authorization")) == true) {
+            throw new BusinessLogicException(ExceptionCode.LOGOUT);
+        } else {
+            if (stayPostDto.getStar() == null) {
+                stayPostDto.setStar(0.0);
+            }
+            Stay stay = stayMapper.toStay(stayPostDto);
+            stay.setCreatedAt(LocalDateTime.now());
+            stay.setMember(host);
 
-        //카테고리 이름으로 등록하게 수정, 일단 카테고리 하나만 되게 수정
-        List<StayCategories> setStayCategories = new ArrayList<>();
-        Category category = categoryService.findVerifiedCategoryByName(categoryName);
-        StayCategories stayCategories = new StayCategories(stay, category);
-        setStayCategories.add(stayCategories);
-        stayCategoriesRepository.save(stayCategories);
-        stay.setStayCategories(setStayCategories);
+            //카테고리 이름으로 등록하게 수정, 일단 카테고리 하나만 되게 수정
+            List<StayCategories> setStayCategories = new ArrayList<>();
+            Category category = categoryService.findVerifiedCategoryByName(categoryName);
+            StayCategories stayCategories = new StayCategories(stay, category);
+            setStayCategories.add(stayCategories);
+            stayCategoriesRepository.save(stayCategories);
+            stay.setStayCategories(setStayCategories);
 
 //        //category 설정
 //        List<StayCategories> setStayCategories = new ArrayList<>();
@@ -66,9 +72,10 @@ public class StayService {
 //        }
 //        stay.setStayCategories(setStayCategories);
 
-        //이미지 업로드
-        stay.setImages(imageService.uploadImage(images, stay));
-        stayRepository.save(stay);
+            //이미지 업로드
+            stay.setImages(imageService.uploadImage(images, stay));
+            stayRepository.save(stay);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -94,6 +101,12 @@ public class StayService {
                 .ifPresent(country -> findStay.setCountry(country));
         Optional.ofNullable(stayPatchDto.getAddress())
                 .ifPresent(address -> findStay.setAddress(address));
+        Optional.ofNullable(stayPatchDto.getDetailAddress())
+                .ifPresent(detailAddress -> findStay.setDetailAddress(detailAddress));
+        Optional.ofNullable(stayPatchDto.getStartDate())
+                .ifPresent(startDate -> findStay.setStartDate(startDate));
+        Optional.ofNullable(stayPatchDto.getEndDate())
+                .ifPresent(endDate -> findStay.setEndDate(endDate));
 //        Optional.ofNullable(stayPatchDto.isGuestFavourite())
 //                .ifPresent(guestFavourite -> findStay.setGuestFavourite(guestFavourite));
         Optional.ofNullable(stayPatchDto.getGuest())
