@@ -9,11 +9,9 @@ import com.airbnb.airbnb.stay.dto.StayPatchDto;
 import com.airbnb.airbnb.stay.dto.StayPostDto;
 import com.airbnb.airbnb.stay.entity.Category;
 import com.airbnb.airbnb.stay.entity.Stay;
-import com.airbnb.airbnb.stay.entity.StayCategories;
 import com.airbnb.airbnb.exception.BusinessLogicException;
 import com.airbnb.airbnb.exception.ExceptionCode;
 import com.airbnb.airbnb.stay.mapper.StayMapper;
-import com.airbnb.airbnb.stay.repository.StayCategoriesRepository;
 import com.airbnb.airbnb.stay.repository.StayRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,7 +32,6 @@ public class StayService {
     private final StayRepository stayRepository;
     private final StayMapper stayMapper;
     private final CategoryService categoryService;
-    private final StayCategoriesRepository stayCategoriesRepository;
     private final ImageService imageService;
     private final MemberService memberService;
     private final RedisUtil redisUtil;
@@ -54,23 +51,8 @@ public class StayService {
             stay.setCreatedAt(LocalDateTime.now());
             stay.setMember(host);
 
-            //카테고리 이름으로 등록하게 수정, 일단 카테고리 하나만 되게 수정
-            List<StayCategories> setStayCategories = new ArrayList<>();
             Category category = categoryService.findVerifiedCategoryByName(categoryName);
-            StayCategories stayCategories = new StayCategories(stay, category);
-            setStayCategories.add(stayCategories);
-            stayCategoriesRepository.save(stayCategories);
-            stay.setStayCategories(setStayCategories);
-
-//        //category 설정
-//        List<StayCategories> setStayCategories = new ArrayList<>();
-//        for (Long categoryId : categoryIds) {
-//            Category category = categoryService.findVerifiedCategory(categoryId);
-//            StayCategories stayCategories = new StayCategories(stay, category);
-//            setStayCategories.add(stayCategories);
-//            stayCategoriesRepository.save(stayCategories);
-//        }
-//        stay.setStayCategories(setStayCategories);
+            stay.setCategory(category);
 
             //이미지 업로드
             stay.setImages(imageService.uploadImage(images, stay));
@@ -91,7 +73,7 @@ public class StayService {
     }
 
     @Transactional
-    public void updateStay (StayPatchDto stayPatchDto, Long id) {
+    public void updateStay (StayPatchDto stayPatchDto, Long id, String categoryName) {
         Stay findStay = findVerifiedStay(id);
         Optional.ofNullable(stayPatchDto.getHouseName())
                 .ifPresent(houseName -> findStay.setHouseName(houseName));
@@ -125,13 +107,10 @@ public class StayService {
                 .ifPresent(bedrooms -> findStay.setBedrooms(bedrooms));
         Optional.ofNullable(stayPatchDto.getBathrooms())
                 .ifPresent(bathrooms -> findStay.setBathrooms(bathrooms));
-        Optional.ofNullable(stayPatchDto.getCategories())
-                .ifPresent(categories -> {
-                        stayCategoriesRepository.deleteAllByStay_Id(id);
-                        for (Long category : categories) {
-                        StayCategories stayCategories = new StayCategories(findStay, categoryService.findVerifiedCategory(category));
-                        stayCategoriesRepository.save(stayCategories);
-                        }});
+        if (categoryName != null) {
+            Category category = categoryService.findVerifiedCategoryByName(categoryName);
+            findStay.setCategory(category);
+        }
         stayRepository.save(findStay);
     }
 
@@ -142,12 +121,7 @@ public class StayService {
 
     @Transactional(readOnly = true)
     public List<Stay> findStaysByCategory (int page, int size, String categoryName) {
-        List<StayCategories> staysByCategory = stayCategoriesRepository.findAllByCategory_CategoryName(categoryName,PageRequest.of(page-1, size, Sort.by("id").descending()));
-        List<Stay> stays = new ArrayList<>();
-        for (StayCategories stayCategories : staysByCategory) {
-            Stay stay = stayCategories.getStay();
-            stays.add(stay);
-        }
+        List<Stay> stays = stayRepository.findAllByCategory(categoryName,PageRequest.of(page-1, size, Sort.by("id").descending()));
         return stays;
     }
 

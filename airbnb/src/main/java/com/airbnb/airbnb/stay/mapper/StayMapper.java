@@ -6,7 +6,6 @@ import com.airbnb.airbnb.stay.dto.StayPostDto;
 import com.airbnb.airbnb.stay.dto.StayResponseDto;
 import com.airbnb.airbnb.image.entity.Image;
 import com.airbnb.airbnb.stay.entity.Stay;
-import com.airbnb.airbnb.stay.entity.StayCategories;
 import org.mapstruct.Mapper;
 
 import java.util.ArrayList;
@@ -38,10 +37,11 @@ public interface StayMapper {
         stayResponseDto.setBathrooms(stay.getBathrooms());
         stayResponseDto.setCreatedAt(stay.getCreatedAt());
         stayResponseDto.setHostId(stay.getMember().getId());
-        stayResponseDto.setHostName(stay.getMember().getUsername());
+        stayResponseDto.setHostName(stay.getMember().getUserName());
         stayResponseDto.setDetailAddress(stay.getDetailAddress());
         stayResponseDto.setStartDate(stay.getStartDate());
         stayResponseDto.setEndDate(stay.getEndDate());
+        stayResponseDto.setCategory(stay.getCategory().getCategoryName());
         if (stay.getImages() != null) {
             List<Image> images = stay.getImages();
             for (Image image : images) {
@@ -63,14 +63,7 @@ public interface StayMapper {
         staySumResponseDto.setHostId(stay.getMember().getId());
         staySumResponseDto.setStar(stay.getStar());
         staySumResponseDto.setPrice(stay.getPrice());
-        if (stay.getStayCategories() != null) {
-            List<StayCategories> stayCategories = stay.getStayCategories();
-            List<String> categoryName = new ArrayList<>();
-            for (StayCategories stayCategory : stayCategories) {
-                categoryName.add(stayCategory.getCategory().getCategoryName());
-            }
-            staySumResponseDto.setCategory(categoryName);
-        }
+        staySumResponseDto.setCategory(stay.getCategory().getCategoryName());
         staySumResponseDto.setStartDate(stay.getStartDate());
         staySumResponseDto.setEndDate(stay.getEndDate());
 

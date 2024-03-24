@@ -8,6 +8,7 @@ import com.airbnb.airbnb.stay.mapper.StayMapper;
 import com.airbnb.airbnb.image.service.ImageService;
 import com.airbnb.airbnb.stay.service.StayService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -30,15 +32,16 @@ public class StayController {
     private final StayService stayService;
     private final ImageService imageService;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @Transactional
     @PostMapping
     public ResponseEntity postStay (@AuthenticationPrincipal Member host,
                                     @Valid @RequestPart(value = "stay") StayPostDto stayPostDto,
-//                                    @RequestParam Set<Long> categoryIds,
                                     @RequestParam String categoryName,
                                     @RequestPart(value = "image") List<MultipartFile> images) {
-//        stayService.createStay(stayPostDto, categoryIds, images);
-          stayService.createStay(stayPostDto, categoryName, images, host);
+          stayService.createStay(stayPostDto, categoryName, images, host, request);
 
           return new ResponseEntity("숙소 등록이 완료되었습니다.", HttpStatus.CREATED);
     }
@@ -53,9 +56,10 @@ public class StayController {
     @PatchMapping("/{stay-id}")
     public ResponseEntity patchStay (@Valid @RequestPart(value = "stay") StayPatchDto stayPatchDto,
                                      @PathVariable("stay-id") Long id,
+                                     @RequestParam(required = false) String categoryName,
                                      @RequestPart(value = "image", required = false) List<MultipartFile> images) {
 
-        stayService.updateStay(stayPatchDto,id);
+        stayService.updateStay(stayPatchDto, id, categoryName);
 
         //patch시 이미지 첨부 안 했을 때는 있던 그대로, 첨부한 경우엔 추가 업로드 (DB에는 이전에 업로드한 이미지 + 새로 업로드한 이미지)
         if (images != null && !images.isEmpty()) {
@@ -82,7 +86,7 @@ public class StayController {
     public ResponseEntity getStaysByCategory (@Positive @RequestParam int page,
                                               @Positive @RequestParam int size,
                                               @RequestParam String categoryName) {
-        return new ResponseEntity(stayMapper.toStayResponseDtos(stayService.findStaysByCategory(page, size, categoryName)), HttpStatus.OK);
+        return new ResponseEntity(stayMapper.toStaySumResponseDtos(stayService.findStaysByCategory(page, size, categoryName)), HttpStatus.OK);
     }
 
     @Transactional
