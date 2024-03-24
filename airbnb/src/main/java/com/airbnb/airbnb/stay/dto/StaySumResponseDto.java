@@ -16,7 +16,7 @@ public class StaySumResponseDto {
     private LocalDateTime createdAt;
     private Double star;
     private Long price;
-    private List<String> category = new ArrayList<>();
+    private String category;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 }

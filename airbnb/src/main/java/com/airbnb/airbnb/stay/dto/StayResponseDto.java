@@ -26,6 +26,7 @@ public class StayResponseDto {
     private LocalDateTime endDate;
     private Long guest;
     private Double star;
+    private String category;
 //    private boolean guestFavourite;
     private Stay.PlaceType placeType;
     private Stay.PropertyType propertyType;
