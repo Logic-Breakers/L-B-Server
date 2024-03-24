@@ -9,4 +9,6 @@ import java.util.List;
 public interface StayRepository extends JpaRepository<Stay,Long>, JpaSpecificationExecutor<Stay> {
 
     List<Stay> findAllByCountry(String country, Pageable pageable);
+
+    List<Stay> findAllByCategory(String categoryName, Pageable pageable);
 }
