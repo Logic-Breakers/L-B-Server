@@ -49,7 +49,7 @@ public class MemberService {
     public void updateMember(MemberPatchDto memberPatchDto, Long id) {
         Member findMember = findVerifiedMember(id);
         Optional.ofNullable(memberPatchDto.getName())
-                .ifPresent(username -> findMember.setUsername(username));
+                .ifPresent(userName -> findMember.setUserName(userName));
         Optional.ofNullable(memberPatchDto.getPhone())
                 .ifPresent(phone -> findMember.setPhone(phone));
         Optional.ofNullable(memberPatchDto.getEmail())

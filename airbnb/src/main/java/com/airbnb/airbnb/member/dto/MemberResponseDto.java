@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class MemberResponseDto {
     private Long id;
-    private String username;
+    private String userName;
     private LocalDateTime birthDate;
     private String country;
     private String phone;

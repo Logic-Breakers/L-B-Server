@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MemberPostDto {
     @NotBlank(message = "성명을 입력해야 합니다.")
-    private String username;
+    private String userName;
 
     @NotNull(message = "생년월일을 입력해야 합니다.")
     private LocalDateTime birthDate;

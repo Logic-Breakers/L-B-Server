@@ -25,7 +25,7 @@ public class Member {
     private Long id;
 
     @Column(nullable = false)
-    private String username;
+    private String userName;
 
     @Column(nullable = false)
     private LocalDateTime birthDate;
